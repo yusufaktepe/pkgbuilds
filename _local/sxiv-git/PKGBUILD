@@ -1,0 +1,32 @@
+# Maintainer: Yusuf Aktepe <yusuf@yusufaktepe.com>
+
+pkgname=sxiv-git
+pkgver=26.r5.8dc800f
+pkgrel=1
+epoch=1
+pkgdesc='Simple X Image Viewer'
+arch=('x86_64')
+license=('GPL2')
+url='https://github.com/yusufaktepe/sxiv'
+depends=('imlib2' 'desktop-file-utils' 'xdg-utils' 'hicolor-icon-theme' 'libexif' 'libxft')
+makedepends=('git')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+source=("${pkgname%-git}::git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+	cd ${pkgname%-git}
+	git describe --long | sed 's/^v//;s/\([^-]*-\)g/r\1/;s/-/./g'
+}
+
+build() {
+	make -C ${pkgname%-git}
+}
+
+package() {
+	cd ${pkgname%-git}
+	make PREFIX=/usr DESTDIR="$pkgdir" install
+	make -C icon PREFIX=/usr DESTDIR="$pkgdir" install
+	install -Dm644 sxiv.desktop "$pkgdir"/usr/share/applications/sxiv.desktop
+}
