@@ -1,0 +1,31 @@
+# Maintainer: Yusuf Aktepe <yusuf@yusufaktepe.com>
+
+pkgname=xpub-git
+pkgver=r64.001f83c
+pkgrel=1
+pkgdesc="POSIX Shell script to get user's display environment variables of any TTY from anywhere."
+arch=('any')
+url="https://github.com/yusufaktepe/xpub"
+license=('MIT')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+makedepends=('help2man')
+source=("${pkgname%-git}::git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+	cd ${pkgname%-git}
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+	cd ${pkgname%-git}
+	help2man -N -n "$pkgdesc" -h -h -v -v src/xpub.sh | gzip - > xpub.1.gz
+}
+
+package() {
+	cd ${pkgname%-git}
+	install -Dm644 LICENSE -t "$pkgdir/usr/share/licenses/xpub"
+	install -Dm644 xpub.1.gz -t "$pkgdir/usr/share/man/man1"
+	install -Dm755 src/xpub.sh "$pkgdir/usr/bin/xpub"
+}
