@@ -1,7 +1,7 @@
 # Maintainer: Yusuf Aktepe <yusuf@yusufaktepe.com>
 
 pkgname=xpub-git
-pkgver=r64.001f83c
+pkgver=r64.0744686
 pkgrel=1
 pkgdesc="POSIX Shell script to get user's display environment variables of any TTY from anywhere."
 arch=('any')
